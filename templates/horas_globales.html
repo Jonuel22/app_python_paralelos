@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Horas Globales</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: auto;
+            padding: 20px;
+            background: #ffffff;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .header button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+        .header button:hover {
+            background-color: #0056b3;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #007bff;
+            color: white;
+            position: sticky;
+            top: 0;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+        .section {
+            margin-bottom: 30px;
+            padding: 15px;
+            border-radius: 5px;
+            background-color: #e9ecef;
+            box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
+        }
+        ul {
+            padding: 0;
+            margin: 0;
+            list-style: none;
+        }
+        button.generate {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-top: 20px;
+            transition: background-color 0.3s ease;
+        }
+        button.generate:hover {
+            background-color: #218838;
+        }
+        .message {
+            margin-top: 20px;
+            background-color: #e9ecef;
+            border-left: 4px solid #007bff;
+            padding: 10px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Horas Globales</h1>
+            <form action="{{ url_for('menu') }}" method="get">
+                <button type="submit">Volver al Menú Principal</button>
+            </form>
+        </div>
+
+        <div class="section">
+            <h2>Listado de Trabajadores</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Apellido</th>
+                        <th>Asistencias</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for trabajador_id, info in trabajadores_horas.items() %}
+                        <tr>
+                            <td>{{ trabajador_id }}</td>
+                            <td>{{ info.nombre }}</td>
+                            <td>{{ info.apellido }}</td>
+                            <td>
+                                <ul>
+                                    {% for asistencia in info.asistencias %}
+                                        <li>
+                                            {{ asistencia.fecha }} - 
+                                            Entrada: {{ asistencia.hora_entrada if asistencia.hora_entrada else 'No registrada' }} - 
+                                            Salida: {{ asistencia.hora_salida if asistencia.hora_salida else 'No registrada' }}
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="section">
+            <h2>Acciones</h2>
+            <!-- Formulario para generar JSON -->
+            <form id="jsonForm" action="{{ url_for('descargar_json') }}" method="get" target="_blank" onsubmit="openDownload(event)">
+                <button type="submit" class="generate">Generar JSON</button>
+            </form>
+        </div>
+
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div class="message">
+                    <ul>
+                    {% for message in messages %}
+                        <li>{{ message|safe }}</li>
+                    {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+        {% endwith %}
+    </div>
+
+    <script>
+        function openDownload(event) {
+            // Evita que el formulario se envíe de la forma tradicional
+            event.preventDefault();
+            // Crea un nuevo formulario para la descarga
+            const form = document.getElementById('jsonForm');
+            // Abre una nueva ventana con la acción del formulario
+            window.open(form.action, '_blank');
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menú Principal - Gestión de Asistencias</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif; /* Tipografía moderna */
+            background-color: #e9ecef;
+            margin: 0;
+            padding: 0;
+        }
+
+        .menu-container {
+            max-width: 1000px;
+            margin: 50px auto;
+            background: #fff;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: #333;
+            margin-bottom: 40px;
+        }
+
+        .mosaic {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 30px;
+        }
+
+        .mosaic-item {
+            background: #007bff;
+            color: white;
+            border-radius: 12px;
+            padding: 30px 20px;
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .mosaic-item:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 24px rgba(0, 123, 255, 0.3);
+            background-color: #0056b3;
+        }
+
+        .mosaic-item a {
+            text-decoration: none;
+            color: inherit;
+            display: block;
+            height: 100%;
+        }
+
+        .mosaic-item h2 {
+            font-size: 1.6rem;
+            margin-bottom: 10px;
+            transition: color 0.3s;
+        }
+
+        .mosaic-item p {
+            font-size: 1rem;
+            line-height: 1.4;
+            color: #d1ecff;
+        }
+
+        .mosaic-item:hover h2 {
+            color: #ffeb3b; /* Efecto de color en el título al pasar el mouse */
+        }
+
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 2rem;
+            }
+            .mosaic-item h2 {
+                font-size: 1.4rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="menu-container">
+        <h1>Menú Principal</h1>
+        <div class="mosaic">
+            <div class="mosaic-item">
+                <a href="/mantenimiento_trabajadores">
+                    <h2>Mantenimiento de Empleados</h2>
+                    <p>Crear, modificar y eliminar empleados.</p>
+                </a>
+            </div>
+            <div class="mosaic-item">
+                <a href="/mantenimiento_horas">
+                    <h2>Mantenimiento de Horas</h2>
+                    <p>Registrar horas de entrada y salida.</p>
+                </a>
+            </div>
+            <div class="mosaic-item">
+                <a href="/consulta_horas">
+                    <h2>Consulta de Horas por Trabajador</h2>
+                    <p>Visualiza las horas trabajadas por trabajador unico.</p>
+                </a>
+            </div>
+            <div class="mosaic-item">
+                <a href="/horas_globales">
+                    <h2>Consulta de Horas Global</h2>
+                    <p>Visualiza las horas de todos los trabajadores.</p>
+                </a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

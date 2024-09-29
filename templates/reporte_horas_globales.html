@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reporte de Horas Globales</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #007bff;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <h1>Reporte de Horas Globales</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Trabajador</th>
+                <th>Horas Trabajadas</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for id, trabajador in trabajadores_horas.items() %}
+            <tr>
+                <td>{{ trabajador.nombre }} {{ trabajador.apellido }}</td>
+                <td>
+                    <ul>
+                        {% for asistencia in trabajador.asistencias %}
+                        <li>Fecha: {{ asistencia.fecha }}, Entrada: {{ asistencia.hora_entrada }}, Salida: {{ asistencia.hora_salida }}</li>
+                        {% endfor %}
+                    </ul>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

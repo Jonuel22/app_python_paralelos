@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mantenimiento de Trabajadores - Gestión de Asistencias</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa; /* Fondo gris claro */
+            margin: 0;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+
+        h1, h2 {
+            color: #343a40; /* Color del texto */
+        }
+
+        .btn-regresar {
+            display: inline-block;
+            margin-bottom: 20px;
+            background-color: #007bff; /* Color azul */
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            padding: 10px 15px; /* Tamaño del botón */
+            transition: background-color 0.3s; /* Efecto de transición */
+        }
+
+        .btn-regresar:hover {
+            background-color: #0056b3; /* Color azul más oscuro al pasar el ratón */
+        }
+
+        form {
+            margin-bottom: 20px; /* Espacio entre el formulario y la tabla */
+            background: #e9ecef; /* Fondo gris claro para el formulario */
+            padding: 15px;
+            border-radius: 5px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px; /* Espacio entre etiqueta y campo */
+            font-weight: bold; /* Negrita para las etiquetas */
+        }
+
+        input[type="text"],
+        input[type="email"],
+        button {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0; /* Espacio entre campos */
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            font-size: 16px; /* Aumentar el tamaño de la fuente */
+        }
+
+        button {
+            background-color: #28a745; /* Color verde para el botón */
+            color: white;
+            border: none; /* Sin borde */
+            cursor: pointer; /* Cambiar cursor al pasar el ratón */
+            transition: background-color 0.3s; /* Efecto de transición */
+        }
+
+        button:hover {
+            background-color: #218838; /* Color verde más oscuro al pasar el ratón */
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse; /* Colapsar bordes */
+            margin-top: 20px; /* Espacio entre el formulario y la tabla */
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #dee2e6; /* Bordes de las filas */
+        }
+
+        th {
+            background-color: #007bff; /* Color azul para encabezados */
+            color: white; /* Color de texto blanco para encabezados */
+        }
+
+        tr:hover {
+            background-color: #f1f1f1; /* Color de fondo de la fila al pasar el ratón */
+        }
+
+        .actions {
+            display: flex; /* Usar flexbox para las acciones */
+            gap: 10px; /* Espacio entre botones */
+        }
+
+        .actions a,
+        .actions button {
+            background-color: #007bff; /* Color azul para los botones de acciones */
+            color: white;
+            padding: 5px 10px; /* Tamaño del botón */
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s; /* Efecto de transición */
+        }
+
+        .actions a:hover,
+        .actions button:hover {
+            background-color: #0056b3; /* Color azul más oscuro al pasar el ratón */
+        }
+
+        .flashes {
+            list-style-type: none;
+            padding: 0;
+            margin-bottom: 20px; /* Espacio antes de la lista de mensajes */
+            color: red; /* Color para mensajes de error */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Botón para regresar al menú principal -->
+        <a href="{{ url_for('menu') }}" class="btn-regresar">
+            <i class="fas fa-arrow-left"></i> Regresar
+        </a>
+
+        <h1>Mantenimiento de Trabajadores</h1>
+
+        <!-- Mensajes de éxito o error -->
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <ul class="flashes">
+                    {% for message in messages %}
+                        <li>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
+
+        <!-- Formulario para agregar un nuevo trabajador -->
+        <h2>Agregar Trabajador</h2>
+        <form action="/mantenimiento_trabajadores" method="post">
+            <label for="nombre">Nombre:</label>
+            <input type="text" id="nombre" name="nombre" required>
+
+            <label for="apellido">Apellido:</label>
+            <input type="text" id="apellido" name="apellido" required>
+
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+
+            <button type="submit">Agregar Trabajador</button>
+        </form>
+
+        <!-- Tabla de trabajadores existentes -->
+        <h2>Lista de Trabajadores</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Apellido</th>
+                    <th>Email</th>
+                    <th>Fecha de Registro</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for trabajador in trabajadores %}
+                <tr>
+                    <td>{{ trabajador.id }}</td>
+                    <td>{{ trabajador.nombre }}</td>
+                    <td>{{ trabajador.apellido }}</td>
+                    <td>{{ trabajador.email }}</td>
+                    <td>{{ trabajador.fecha_registro }}</td>
+                    <td class="actions">
+                        <a href="/editar_trabajador/{{ trabajador.id }}">Editar</a>
+                        <form action="/eliminar_trabajador/{{ trabajador.id }}" method="post" style="display:inline;">
+                            <button type="submit" onclick="return confirm('¿Estás seguro de que deseas eliminar este trabajador?');">Eliminar</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
